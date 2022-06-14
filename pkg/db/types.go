@@ -12,8 +12,10 @@ type AcmeDb struct {
 	Driver  string
 }
 
-// QueryOption is a functional option to populate query builder
-type QueryOption func(q AcQuery)
+// DB is the interface to wrap low-level functions of a db of choice.
+type DB interface {
+	Query(query string) ([]byte, error)
+}
 
 type DbType string
 
@@ -24,10 +26,10 @@ const (
 
 type AcQuery []string
 
-type DB interface {
-	Query(query string) ([]byte, error)
-}
+// QueryOption is a functional option to populate query.
+type QueryOption func(q AcQuery)
 
+// NewQuery creates and returns a new query.
 func NewQuery(opts ...QueryOption) AcQuery {
 	q := AcQuery{}
 	for _, opt := range opts {
@@ -36,6 +38,7 @@ func NewQuery(opts ...QueryOption) AcQuery {
 	return q
 }
 
+// BuildQuery allows adding additional parameters to the query.
 func (q AcQuery) BuildQuery(opts ...QueryOption) AcQuery {
 	for _, opt := range opts {
 		opt(q)

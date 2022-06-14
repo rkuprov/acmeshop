@@ -13,6 +13,7 @@ type Product struct {
 	Description string  `json:"description"`
 }
 
+// AcmeServer wraps standard http.Server and allows for additional functionality.
 type AcmeServer struct {
 	Server *http.Server
 }

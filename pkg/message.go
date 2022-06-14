@@ -1,5 +1,6 @@
 package pkg
 
+// Message was never implemented
 type Message struct {
 	timeScheduled int64
 	id            int64

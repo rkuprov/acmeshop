@@ -11,6 +11,7 @@ var _ db.DB = (*BQDB)(nil)
 
 var BQUtil, _ = NewBQ(context.Background())
 
+// BQDB is a wrapper around the bigquery.Service. Quite contrived.
 type BQDB struct {
 	Conn *bigquery.Service
 }
@@ -25,6 +26,7 @@ func NewBQ(c context.Context) (BQDB, error) {
 	}, nil
 }
 
+// Query implements the db.DB interface and allows a single way of interacting with a db of choice.
 func (b BQDB) Query(query string) ([]byte, error) {
 	var qr *bigquery.QueryResponse
 	var err error
@@ -43,6 +45,6 @@ func (b BQDB) Query(query string) ([]byte, error) {
 	return ret, nil
 }
 
-func (b BQDB) Service() *bigquery.Service {
+func (b BQDB) service() *bigquery.Service {
 	return b.Conn
 }

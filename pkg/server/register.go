@@ -42,6 +42,7 @@ func getProductBulk(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// unmarshal body into product struct
+	// NOTE: I decided that the request body must come `\n` delimited.
 	reqs := bytes.Split(body, []byte("\n"))
 	q := db.NewQuery(db.WithAction("SELECT"), db.WithConjunction("FROM"), db.WithTable(db.AcmeTableProducts))
 	for i := range reqs {
@@ -50,6 +51,7 @@ func getProductBulk(w http.ResponseWriter, r *http.Request) {
 		}
 		q.BuildQuery(db.WithID(string(reqs[i])))
 	}
+
 	out, err := bq.BQUtil.Query(q.String())
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
